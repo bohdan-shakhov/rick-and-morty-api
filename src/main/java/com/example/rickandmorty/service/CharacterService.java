@@ -10,14 +10,13 @@ import com.example.rickandmorty.enums.Status;
 import com.example.rickandmorty.repository.CharacterRepository;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.repository.LocationRepository;
+import com.example.rickandmorty.response.CharacterResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.*;
 
@@ -37,10 +36,6 @@ public class CharacterService {
         this.locationRepository = locationRepository;
         this.episodeRepository = episodeRepository;
     }
-
-//    public Iterable<Characters> list() {
-//        return characterRepository.findAll();
-//    }
 
     public Characters save(Characters characters) {
         return characterRepository.save(characters);
@@ -90,5 +85,21 @@ public class CharacterService {
                 save(characters);
             });
         });
+    }
+
+    public CharacterResponse getCharacterById(Long id) {
+        Optional<Characters> optionalCharacters = characterRepository.findById(id);
+        if (optionalCharacters.isPresent()) {
+            return modelMapper.map(optionalCharacters.get(), CharacterResponse.class);
+        }
+        return new CharacterResponse();
+    }
+
+    public List<CharacterResponse> getCharactersByIds(List<String> ids) {
+        return ids.stream()
+                .map(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .map(character -> modelMapper.map(character, CharacterResponse.class))
+                .collect(Collectors.toList());
     }
 }
