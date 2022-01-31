@@ -4,14 +4,15 @@ import com.example.rickandmorty.dto.location.LocationDTO;
 import com.example.rickandmorty.dto.location.PageLocation;
 import com.example.rickandmorty.entity.Location;
 import com.example.rickandmorty.repository.LocationRepository;
+import com.example.rickandmorty.response.LocationResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class LocationService {
@@ -57,5 +58,21 @@ public class LocationService {
             });
         });
         save(locations);
+    }
+
+    public LocationResponse getLocationById(Long id) {
+        Optional<Location> optionalLocation = locationRepository.findById(id);
+        if (optionalLocation.isPresent()) {
+            return modelMapper.map(optionalLocation.get(), LocationResponse.class);
+        }
+        return new LocationResponse();
+    }
+
+    public List<LocationResponse> getLocationsByIds(List<String> ids) {
+        return ids.stream()
+                .map(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .map(location -> modelMapper.map(location, LocationResponse.class))
+                .collect(Collectors.toList());
     }
 }
