@@ -19,9 +19,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import static com.example.rickandmorty.constant.ProgrammConstant.*;
+
 @Service
 public class CharacterService {
-    private final static String CHARACTER_URL = "https://rickandmortyapi.com/api/character";
 
     private ModelMapper modelMapper = new ModelMapper();
 

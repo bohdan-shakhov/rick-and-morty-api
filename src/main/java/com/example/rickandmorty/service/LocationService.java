@@ -8,12 +8,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import static com.example.rickandmorty.constant.ProgrammConstant.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class LocationService {
-    private static final String LOCATION_URL = "https://rickandmortyapi.com/api/location";
 
     private ModelMapper modelMapper = new ModelMapper();
     private LocationRepository locationRepository;
