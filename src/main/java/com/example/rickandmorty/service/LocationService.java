@@ -7,14 +7,15 @@ import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
+
+import static com.example.rickandmorty.constant.ProgrammConstant.LOCATION_URL;
 
 @Service
 public class LocationService {

@@ -6,16 +6,12 @@ import com.example.rickandmorty.entity.Episode;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.response.EpisodeResponse;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
