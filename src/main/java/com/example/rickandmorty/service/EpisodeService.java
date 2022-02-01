@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.EPISODE_URL;
 
@@ -69,8 +70,16 @@ public class EpisodeService {
                 episodes.add(episode);
             });
         });
-
         save(episodes);
+    }
+
+    public List<EpisodeResponse> getAllEpisodes() {
+        return LongStream.iterate(1, i -> i + 1)
+                .mapToObj(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .limit(51)
+                .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
+                .collect(Collectors.toList());
     }
 
     public List<EpisodeResponse> getEpisodesByIds(List<String> ids) {

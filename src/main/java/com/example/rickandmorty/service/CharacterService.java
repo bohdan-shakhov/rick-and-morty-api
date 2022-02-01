@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.*;
 
@@ -83,6 +84,15 @@ public class CharacterService {
                 save(characters);
             });
         });
+    }
+
+    public List<CharacterResponse> getAllCharacters() {
+        return LongStream.iterate(1, i -> i + 1)
+                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .limit(826)
+                .map(character -> modelMapper.map(character, CharacterResponse.class))
+                .collect(Collectors.toList());
     }
 
     public List<CharacterResponse> getCharactersByIds(List<String> ids) {

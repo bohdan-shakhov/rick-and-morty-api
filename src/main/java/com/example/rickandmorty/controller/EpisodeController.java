@@ -21,9 +21,13 @@ public class EpisodeController {
         this.episodeService = episodeService;
     }
 
+    @GetMapping()
+    public List<EpisodeResponse> getAllEpisodes() {
+        return episodeService.getAllEpisodes();
+    }
+
     @GetMapping("/{ids}")
     public List<EpisodeResponse> getEpisodesByIds(@PathVariable List<String> ids) {
-        List<EpisodeResponse> episodes = episodeService.getEpisodesByIds(ids);
-        return episodes;
+        return episodeService.getEpisodesByIds(ids);
     }
 }

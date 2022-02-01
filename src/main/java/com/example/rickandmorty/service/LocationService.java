@@ -14,6 +14,7 @@ import static com.example.rickandmorty.constant.ProgrammConstant.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 @Service
 public class LocationService {
@@ -59,6 +60,15 @@ public class LocationService {
             });
         });
         save(locations);
+    }
+
+    public List<LocationResponse> getAllLocations() {
+        return LongStream.iterate(1, i -> i + 1)
+                .mapToObj(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .limit(126)
+                .map(location -> modelMapper.map(location, LocationResponse.class))
+                .collect(Collectors.toList());
     }
 
     public List<LocationResponse> getLocationsByIds(List<String> ids) {
