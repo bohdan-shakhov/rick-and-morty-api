@@ -7,6 +7,7 @@ import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.*;
@@ -58,14 +59,6 @@ public class LocationService {
             });
         });
         save(locations);
-    }
-
-    public LocationResponse getLocationById(Long id) {
-        Optional<Location> optionalLocation = locationRepository.findById(id);
-        if (optionalLocation.isPresent()) {
-            return modelMapper.map(optionalLocation.get(), LocationResponse.class);
-        }
-        return new LocationResponse();
     }
 
     public List<LocationResponse> getLocationsByIds(List<String> ids) {

@@ -6,16 +6,19 @@ import com.example.rickandmorty.entity.Episode;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.response.EpisodeResponse;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import static com.example.rickandmorty.constant.ProgrammConstant.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.example.rickandmorty.constant.ProgrammConstant.EPISODE_URL;
 
 @Service
 public class EpisodeService {
@@ -68,14 +71,6 @@ public class EpisodeService {
         });
 
         save(episodes);
-    }
-
-    public EpisodeResponse getEpisodeById(Long id) {
-        Optional<Episode> optionalEpisode = episodeRepository.findById(id);
-        if (optionalEpisode.isPresent()) {
-            return modelMapper.map(optionalEpisode.get(), EpisodeResponse.class);
-        }
-        return new EpisodeResponse();
     }
 
     public List<EpisodeResponse> getEpisodesByIds(List<String> ids) {

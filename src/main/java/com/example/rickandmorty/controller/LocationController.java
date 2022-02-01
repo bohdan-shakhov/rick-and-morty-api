@@ -9,11 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/location")
 public class LocationController {
 
@@ -24,17 +25,9 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    @GetMapping("/{id}")
-    public LocationResponse getLocationById(@PathVariable("id") long id) {
-        LocationResponse locationById = locationService.getLocationById(id);
-        System.out.println(locationById);
-        return locationById;
-    }
-
-    @GetMapping("/many/{ids}")
+    @GetMapping("/{ids}")
     public List<LocationResponse> getLocationsByArrayOfIds(@PathVariable List<String> ids) {
         List<LocationResponse> locations = locationService.getLocationsByIds(ids);
-        System.out.println(locations);
         return locations;
     }
 

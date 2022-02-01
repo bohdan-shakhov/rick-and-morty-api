@@ -80,19 +80,9 @@ public class CharacterService {
                     optionalEpisode.ifPresent(episodeList::add);
                 });
                 characters.setEpisode(episodeList);
-
-
                 save(characters);
             });
         });
-    }
-
-    public CharacterResponse getCharacterById(Long id) {
-        Optional<Characters> optionalCharacters = characterRepository.findById(id);
-        if (optionalCharacters.isPresent()) {
-            return modelMapper.map(optionalCharacters.get(), CharacterResponse.class);
-        }
-        return new CharacterResponse();
     }
 
     public List<CharacterResponse> getCharactersByIds(List<String> ids) {
