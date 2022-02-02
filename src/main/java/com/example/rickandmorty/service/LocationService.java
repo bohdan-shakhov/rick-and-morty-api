@@ -6,6 +6,7 @@ import com.example.rickandmorty.entity.Location;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -63,7 +64,9 @@ public class LocationService {
         save(locations);
     }
 
+    @Cacheable("locations")
     public List<LocationResponse> getAllLocations() {
+        System.out.println("get all locations");
         return LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
@@ -72,7 +75,9 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable("locations")
     public List<LocationResponse> getLocationsByIds(List<String> ids) {
+        System.out.println("get location by id");
         return ids.stream()
                 .map(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
