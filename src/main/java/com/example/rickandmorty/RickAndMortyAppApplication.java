@@ -28,9 +28,9 @@ public class RickAndMortyAppApplication {
                              LocationService locationService,
                              RestTemplate restTemplate) {
         return args -> {
-//            locationService.saveToDatabase(restTemplate);
-//            episodeService.saveToDatabase(restTemplate);
-//            characterService.saveToDatabase(restTemplate);
+            locationService.saveToDatabase(restTemplate);
+            episodeService.saveToDatabase(restTemplate);
+            characterService.saveToDatabase(restTemplate);
         };
     }
 }
