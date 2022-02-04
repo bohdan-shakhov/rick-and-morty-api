@@ -44,4 +44,13 @@ class LocationControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+
+    void verifyNumberOfLocationsInResponseBodyWhenGetOneLocation() throws Exception {
+        this.mockMvc.perform(get("/location/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andReturn();
+    }
+
 }

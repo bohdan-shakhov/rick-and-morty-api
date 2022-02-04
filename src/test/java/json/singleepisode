@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "air_date": "2013-12-02 00:00:00.0",
+    "characters": [
+      "Rick Sanchez",
+      "Morty Smith",
+      "Bepisian",
+      "Beth Smith",
+      "Canklanker Thom",
+      "Davin",
+      "Frank Palicky",
+      "Glenn",
+      "Hookah Alien",
+      "Jerry Smith",
+      "Jessica",
+      "Jessica's Friend",
+      "Mr. Goldenfold",
+      "Mrs. Sanchez",
+      "Principal Vagina",
+      "Summer Smith",
+      "Davin",
+      "Greebybobe",
+      "Pripudlian"
+    ],
+    "created": "2017-11-10T12:56:33.798",
+    "episode": "S01E01",
+    "name": "Pilot",
+    "url": "https://rickandmortyapi.com/api/episode/1"
+  }
+]
