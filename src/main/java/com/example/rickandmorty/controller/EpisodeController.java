@@ -19,19 +19,33 @@ public class EpisodeController {
 
     @Autowired
     public EpisodeController(EpisodeService episodeService) {
-        LOGGER.info("autowired " + EpisodeService.class.getName() + " into " + EpisodeController.class.getName());
         this.episodeService = episodeService;
+        LOGGER.info("autowired " + EpisodeService.class.getName() + " into " + EpisodeController.class.getName());
     }
 
     @GetMapping()
     public List<EpisodeResponse> getAllEpisodes() {
-        LOGGER.info(EpisodeController.class.getName() + " getting all episodes in response body");
-        return episodeService.getAllEpisodes();
+        List<EpisodeResponse> episodes = null;
+        try {
+            episodes = episodeService.getAllEpisodes();
+            LOGGER.info(EpisodeController.class.getName() + " getting all episodes in response body");
+            return episodes;
+        } catch (Exception e) {
+            LOGGER.error("error to get all episodes", e);
+        }
+        return episodes;
     }
 
     @GetMapping("/{ids}")
     public List<EpisodeResponse> getEpisodesByIds(@PathVariable List<String> ids) {
-        LOGGER.info(EpisodeController.class.getName() + " getting episodes by id/ids " + ids);
-        return episodeService.getEpisodesByIds(ids);
+        List<EpisodeResponse> episodes = null;
+        try {
+            episodes = episodeService.getEpisodesByIds(ids);
+            LOGGER.info(EpisodeController.class.getName() + " getting episodes by id/ids " + ids);
+            return episodes;
+        } catch (Exception e) {
+            LOGGER.error("error to get episodes by id/ids " + ids, e);
+        }
+        return episodes;
     }
 }

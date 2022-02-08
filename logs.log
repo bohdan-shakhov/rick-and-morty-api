@@ -13,3 +13,6 @@
 2022-02-08 10:45:41 INFO  EpisodeController:28 - com.example.rickandmorty.controller.EpisodeController getting all episodes in response body
 2022-02-08 10:45:58 INFO  EpisodeController:34 - com.example.rickandmorty.controller.EpisodeController getting episodes by id/ids [1, 2]
 2022-02-08 10:46:02 INFO  EpisodeController:34 - com.example.rickandmorty.controller.EpisodeController getting episodes by id/ids [1]
+2022-02-08 11:38:38 INFO  CharacterController:22 - autowiredcom.example.rickandmorty.service.CharacterService into com.example.rickandmorty.controller.CharacterController
+2022-02-08 11:38:38 INFO  EpisodeController:22 - autowired com.example.rickandmorty.service.EpisodeService into com.example.rickandmorty.controller.EpisodeController
+2022-02-08 11:38:38 INFO  LocationController:22 - autowired com.example.rickandmorty.service.LocationService into com.example.rickandmorty.controller.LocationController

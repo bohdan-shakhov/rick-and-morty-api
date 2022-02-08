@@ -19,21 +19,34 @@ public class LocationController {
 
     @Autowired
     public LocationController(LocationService locationService) {
-        LOGGER.info("autowired " + LocationService.class.getName() + " into " + LocationController.class.getName());
         this.locationService = locationService;
+        LOGGER.info("autowired " + LocationService.class.getName() + " into " + LocationController.class.getName());
     }
 
     @GetMapping()
     public List<LocationResponse> getAllLocations() {
-        LOGGER.info(LocationController.class.getName() + " getting all locations in response body");
-        return locationService.getAllLocations();
+        List<LocationResponse> locations = null;
+        try {
+            locations = locationService.getAllLocations();
+            LOGGER.info(LocationController.class.getName() + " getting all locations in response body");
+            return locations;
+        } catch (Exception e) {
+            LOGGER.error("error to get all locations", e);
+        }
+        return locations;
     }
 
     @GetMapping("/{ids}")
     public List<LocationResponse> getLocationsByArrayOfIds(@PathVariable List<String> ids) {
-        LOGGER.info(LocationController.class.getName() + " getting locations by id/ids " + ids);
-        return locationService.getLocationsByIds(ids);
+        List<LocationResponse> locations = null;
+        try {
+            locations = locationService.getLocationsByIds(ids);
+            LOGGER.info(LocationController.class.getName() + " getting locations by id/ids " + ids);
+            return locations;
+        } catch (Exception e) {
+            LOGGER.error("error to get locations by id/ids " + ids, e);
+        }
+        return locations;
     }
-
 
 }

@@ -19,19 +19,38 @@ public class CharacterController {
 
     @Autowired
     public CharacterController(CharacterService characterService) {
-        LOGGER.info("autowired" + CharacterService.class.getName() + " into " + CharacterController.class.getName());
         this.characterService = characterService;
+        LOGGER.info("autowired" + CharacterService.class.getName() + " into " + CharacterController.class.getName());
     }
 
     @GetMapping()
     public List<CharacterResponse> getAllCharacters() {
-        LOGGER.info(CharacterController.class.getName() + " getting all characters in response body");
-        return characterService.getAllCharacters();
+        List<CharacterResponse> characters = null;
+        try {
+            characters = characterService.getAllCharacters();
+            LOGGER.info("getting all characters from response body");
+            return characters;
+        } catch (Exception e) {
+            LOGGER.error("error to get all characters", e);
+        }
+        return characters;
     }
 
     @GetMapping("/{ids}")
     public List<CharacterResponse> getCharactersByIds(@PathVariable List<String> ids) {
-        LOGGER.info(CharacterController.class.getName() + " getting characters by id/ids " + ids);
-        return characterService.getCharactersByIds(ids);
+        List<CharacterResponse> characters = null;
+        try {
+            characters = characterService.getCharactersByIds(ids);
+            LOGGER.info(CharacterController.class.getName() + " getting characters by id/ids " + ids);
+            return characters;
+        } catch (Exception e) {
+            LOGGER.error("error to get characters by id/ids " + ids, e);
+        }
+        return characters;
+    }
+
+    @GetMapping("/filtered_by_species_status_gender")
+    public Long getCountOfCharactersWithStatusSpeciesGender() {
+        return characterService.getCountOfCharactersWithStatusSpeciesGender();
     }
 }
