@@ -1,0 +1,15 @@
+2022-02-08 10:34:42 INFO  CharacterController:22 - autowired CharacterService into com.example.rickandmorty.controller.CharacterController
+2022-02-08 10:34:58 INFO  CharacterController:28 - com.example.rickandmorty.controller.CharacterController getting all characters in response body
+2022-02-08 10:35:39 INFO  CharacterController:34 - com.example.rickandmorty.controller.CharacterController getting characters by id/ids
+2022-02-08 10:35:47 INFO  CharacterController:34 - com.example.rickandmorty.controller.CharacterController getting characters by id/ids
+2022-02-08 10:35:51 INFO  CharacterController:34 - com.example.rickandmorty.controller.CharacterController getting characters by id/ids
+2022-02-08 10:43:36 INFO  CharacterController:22 - autowired CharacterService into com.example.rickandmorty.controller.CharacterController
+2022-02-08 10:43:36 INFO  EpisodeController:22 - autowired com.example.rickandmorty.service.EpisodeService into com.example.rickandmorty.controller.EpisodeController
+2022-02-08 10:43:36 INFO  LocationController:22 - autowired com.example.rickandmorty.service.LocationService into com.example.rickandmorty.controller.LocationController
+2022-02-08 10:43:52 INFO  CharacterController:28 - com.example.rickandmorty.controller.CharacterController getting all characters in response body
+2022-02-08 10:44:23 INFO  CharacterController:34 - com.example.rickandmorty.controller.CharacterController getting characters by id/ids [1, 2, 3, 4, 5, 6]
+2022-02-08 10:44:34 INFO  LocationController:28 - com.example.rickandmorty.controller.LocationController getting all episodes in response body
+2022-02-08 10:45:27 INFO  LocationController:34 - com.example.rickandmorty.controller.LocationController getting episodes by id/ids [1, 2]
+2022-02-08 10:45:41 INFO  EpisodeController:28 - com.example.rickandmorty.controller.EpisodeController getting all episodes in response body
+2022-02-08 10:45:58 INFO  EpisodeController:34 - com.example.rickandmorty.controller.EpisodeController getting episodes by id/ids [1, 2]
+2022-02-08 10:46:02 INFO  EpisodeController:34 - com.example.rickandmorty.controller.EpisodeController getting episodes by id/ids [1]

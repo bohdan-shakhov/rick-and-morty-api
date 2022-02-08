@@ -3,6 +3,7 @@ package com.example.rickandmorty;
 import com.example.rickandmorty.service.CharacterService;
 import com.example.rickandmorty.service.EpisodeService;
 import com.example.rickandmorty.service.LocationService;
+import org.apache.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableCaching
 public class RickAndMortyAppApplication {
-
+    private static final Logger LOGGER = Logger.getLogger(RickAndMortyAppApplication.class);
     public static void main(String[] args) {
         SpringApplication.run(RickAndMortyAppApplication.class, args);
     }
@@ -30,8 +31,11 @@ public class RickAndMortyAppApplication {
                              LocationService locationService,
                              RestTemplate restTemplate) {
         return args -> {
+//            LOGGER.info("start saving locations to database");
 //            locationService.saveToDatabase(restTemplate);
+//            LOGGER.info("start saving episodes to database");
 //            episodeService.saveToDatabase(restTemplate);
+//            LOGGER.info("start saving characters to database");
 //            characterService.saveToDatabase(restTemplate);
         };
     }

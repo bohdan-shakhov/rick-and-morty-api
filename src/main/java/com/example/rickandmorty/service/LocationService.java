@@ -5,6 +5,7 @@ import com.example.rickandmorty.dto.location.PageLocation;
 import com.example.rickandmorty.entity.Location;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -20,33 +21,33 @@ import static com.example.rickandmorty.constant.ProgrammConstant.LOCATION_URL;
 
 @Service
 public class LocationService {
-
-    private ModelMapper modelMapper = new ModelMapper();
-    private LocationRepository locationRepository;
+    private static final Logger LOGGER = Logger.getLogger(LocationService.class);
+    private final ModelMapper modelMapper = new ModelMapper();
+    private final LocationRepository locationRepository;
 
     public LocationService(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
     public Iterable<Location> list() {
+        LOGGER.info("getting all locations from database");
         return locationRepository.findAll();
     }
 
-    public Location save(Location location) {
-        return locationRepository.save(location);
-    }
-
     public void save(List<Location> locations) {
+        LOGGER.info("save List of locations (all) into database");
         locationRepository.saveAll(locations);
     }
 
     public void saveToDatabase(RestTemplate restTemplate) {
         PageLocation pageLocation = restTemplate.getForObject(LOCATION_URL, PageLocation.class);
+        LOGGER.info("getting locations from " + (Integer.parseInt(pageLocation.getInfo().getNext()) - 1) + " page");
         List<PageLocation> pageLocationList = new ArrayList<>();
 
         while (true) {
             pageLocationList.add(pageLocation);
             pageLocation = restTemplate.getForObject(pageLocation.getInfo().getNext(), PageLocation.class);
+            LOGGER.info("getting locations from " + (Integer.parseInt(pageLocation.getInfo().getNext()) - 1) + " page");
             if (pageLocation.getInfo().getNext() == null) {
                 pageLocationList.add(pageLocation);
                 break;
@@ -59,14 +60,16 @@ public class LocationService {
             results.forEach(result -> {
                 Location location = modelMapper.map(result, Location.class);
                 locations.add(location);
+                LOGGER.info("getting results of each locations and map to entity");
             });
         });
         save(locations);
+        LOGGER.info("save locations entities to database");
     }
 
     @Cacheable("locations")
     public List<LocationResponse> getAllLocations() {
-        System.out.println("get all locations");
+        LOGGER.debug("getAllLocations() method");
         return LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
@@ -77,7 +80,7 @@ public class LocationService {
 
     @Cacheable("locations")
     public List<LocationResponse> getLocationsByIds(List<String> ids) {
-        System.out.println("get location by id");
+        LOGGER.debug("getLocationsByIds(List<String> ids) method. ID(S): " + ids);
         return ids.stream()
                 .map(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
