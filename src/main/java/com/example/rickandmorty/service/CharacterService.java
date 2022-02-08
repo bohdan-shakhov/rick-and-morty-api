@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.*;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
 
 @Service
 public class CharacterService {
@@ -116,4 +118,25 @@ public class CharacterService {
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .collect(Collectors.toList());
     }
+
+    public Long getCountOfCharactersWithStatusSpeciesGender() {
+        return LongStream.iterate(1, i -> i + 1)
+                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .limit(826)
+                .map(character -> modelMapper.map(character, CharacterResponse.class))
+                .filter(characterResponse -> characterResponse.getGender().equals("MALE"))
+                .filter(characterResponse -> characterResponse.getStatus().equals("DEAD"))
+                .filter(characterResponse -> characterResponse.getSpecies().equals("Human"))
+                .count();
+    }
+
+//    public String getMostPopularPlanet() {
+//        return LongStream.iterate(1, i -> i + 1)
+//                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
+//                .filter(Objects::nonNull)
+//                .limit(826)
+//                .map(character -> modelMapper.map(character, CharacterResponse.class))
+//                .collect(groupingBy(CharacterResponse::getLocation, mapping()));
+//    }
 }
