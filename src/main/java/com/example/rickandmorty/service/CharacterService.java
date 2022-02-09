@@ -11,6 +11,7 @@ import com.example.rickandmorty.repository.CharacterRepository;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.CharacterResponse;
+import com.example.rickandmorty.response.LocationResponse;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.*;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
+import static com.example.rickandmorty.constant.ProgrammConstant.CHARACTER_URL;
 
 @Service
 public class CharacterService {
@@ -48,12 +47,10 @@ public class CharacterService {
 
     public void saveToDatabase(RestTemplate restTemplate) {
         PageCharacter pageCharacter = restTemplate.getForObject(CHARACTER_URL, PageCharacter.class);
-        LOGGER.info("getting characters from " + (Integer.parseInt(pageCharacter.getInfo().getNext()) - 1) + " page");
         List<PageCharacter> pageCharacterList = new ArrayList<>();
         while (true) {
             pageCharacterList.add(pageCharacter);
             pageCharacter = restTemplate.getForObject(pageCharacter.getInfo().getNext(), PageCharacter.class);
-            LOGGER.info("getting characters from " + (Integer.parseInt(pageCharacter.getInfo().getNext()) - 1) + " page");
             if (pageCharacter.getInfo().getNext() == null) {
                 pageCharacterList.add(pageCharacter);
                 break;
@@ -131,12 +128,17 @@ public class CharacterService {
                 .count();
     }
 
-//    public String getMostPopularPlanet() {
-//        return LongStream.iterate(1, i -> i + 1)
-//                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
-//                .filter(Objects::nonNull)
-//                .limit(826)
-//                .map(character -> modelMapper.map(character, CharacterResponse.class))
-//                .collect(groupingBy(CharacterResponse::getLocation, mapping()));
-//    }
+    public String getMostPopularOriginPlanet() {
+        return LongStream.iterate(1, i -> i + 1)
+                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .limit(826)
+                .map(character -> modelMapper.map(character, CharacterResponse.class))
+                .map(CharacterResponse::getOrigin)
+                .filter(Objects::nonNull)
+                .filter(locationResponse -> locationResponse.getType().equals("Planet"))
+                .collect(Collectors.groupingBy(LocationResponse::getName, Collectors.counting()))
+                .entrySet().stream().max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+    }
 }

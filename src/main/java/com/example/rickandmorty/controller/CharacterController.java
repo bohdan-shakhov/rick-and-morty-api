@@ -53,4 +53,9 @@ public class CharacterController {
     public Long getCountOfCharactersWithStatusSpeciesGender() {
         return characterService.getCountOfCharactersWithStatusSpeciesGender();
     }
+
+    @GetMapping("/planet")
+    public String getNameOfMostPopularOriginPlanet() {
+        return characterService.getMostPopularOriginPlanet();
+    }
 }

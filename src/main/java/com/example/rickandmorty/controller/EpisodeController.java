@@ -48,4 +48,9 @@ public class EpisodeController {
         }
         return episodes;
     }
+
+    @GetMapping("/frequently_characters")
+    public List<String> getFiveTheMostFrequentlyCharacters() {
+        return episodeService.getTopFiveMostFrequentlyCharacters();
+    }
 }

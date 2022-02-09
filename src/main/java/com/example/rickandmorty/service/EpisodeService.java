@@ -10,13 +10,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.EPISODE_URL;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.*;
 
 @Service
 public class EpisodeService {
@@ -45,12 +46,10 @@ public class EpisodeService {
 
     public void saveToDatabase(RestTemplate restTemplate) {
         PageEpisode pageEpisode = restTemplate.getForObject(EPISODE_URL, PageEpisode.class);
-        LOGGER.info("getting episodes from " + (Integer.parseInt(pageEpisode.getInfo().getNext()) - 1) + " page");
         List<PageEpisode> pageEpisodeList = new ArrayList<>();
         while (true) {
             pageEpisodeList.add(pageEpisode);
             pageEpisode = restTemplate.getForObject(pageEpisode.getInfo().getNext(), PageEpisode.class);
-            LOGGER.info("getting episodes from " + (Integer.parseInt(pageEpisode.getInfo().getNext()) - 1) + " page");
             if (pageEpisode.getInfo().getNext() == null) {
                 pageEpisodeList.add(pageEpisode);
                 break;
@@ -87,5 +86,25 @@ public class EpisodeService {
                 .filter(Objects::nonNull)
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<String> getTopFiveMostFrequentlyCharacters() {
+        List<String> mostPopularCharacters = new ArrayList<>();
+        Stream<List<String>> listStream = LongStream.iterate(1, i -> i + 1)
+                .mapToObj(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .filter(Objects::nonNull)
+                .limit(51)
+                .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
+                .map(EpisodeResponse::getCharacters);
+
+        listStream.forEach(mostPopularCharacters::addAll);
+        return mostPopularCharacters.stream()
+                .collect(groupingBy(identity(), counting()))
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .map(Map.Entry::getKey)
+                .limit(5)
+                .collect(Collectors.toList());
+
     }
 }

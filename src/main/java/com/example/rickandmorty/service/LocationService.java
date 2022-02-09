@@ -41,13 +41,11 @@ public class LocationService {
 
     public void saveToDatabase(RestTemplate restTemplate) {
         PageLocation pageLocation = restTemplate.getForObject(LOCATION_URL, PageLocation.class);
-        LOGGER.info("getting locations from " + (Integer.parseInt(pageLocation.getInfo().getNext()) - 1) + " page");
         List<PageLocation> pageLocationList = new ArrayList<>();
 
         while (true) {
             pageLocationList.add(pageLocation);
             pageLocation = restTemplate.getForObject(pageLocation.getInfo().getNext(), PageLocation.class);
-            LOGGER.info("getting locations from " + (Integer.parseInt(pageLocation.getInfo().getNext()) - 1) + " page");
             if (pageLocation.getInfo().getNext() == null) {
                 pageLocationList.add(pageLocation);
                 break;
