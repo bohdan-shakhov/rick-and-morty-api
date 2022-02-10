@@ -39,9 +39,9 @@ public class Characters {
 
     @ManyToMany(fetch = FetchType.EAGER,   cascade = CascadeType.MERGE)
     @JoinTable(
-            name = "episode_character",
-            joinColumns = @JoinColumn(name = "episode_id"),
-            inverseJoinColumns = @JoinColumn(name = "character_id")
+            name = "character_episode",
+            joinColumns = @JoinColumn(name = "character_id"),
+            inverseJoinColumns = @JoinColumn(name = "episode_id")
     )
     private List<Episode> episode;
 
