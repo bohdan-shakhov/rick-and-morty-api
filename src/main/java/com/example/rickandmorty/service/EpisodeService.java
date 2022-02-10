@@ -7,6 +7,7 @@ import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.response.EpisodeResponse;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,6 +25,12 @@ public class EpisodeService {
     private static final Logger LOGGER = Logger.getLogger(EpisodeService.class);
     private final ModelMapper modelMapper = new ModelMapper();
     private final EpisodeRepository episodeRepository;
+    private final RestTemplate restTemplate;
+
+    public EpisodeService(EpisodeRepository episodeRepository, RestTemplate restTemplate) {
+        this.episodeRepository = episodeRepository;
+        this.restTemplate = restTemplate;
+    }
 
     public List<Episode> list() {
         LOGGER.info("getting all episodes from database");
@@ -35,16 +42,13 @@ public class EpisodeService {
         return episodes;
     }
 
-    public EpisodeService(EpisodeRepository episodeRepository) {
-        this.episodeRepository = episodeRepository;
-    }
-
     public void save(List<Episode> episodes) {
         LOGGER.info("save List of episodes (all) into database");
         episodeRepository.saveAll(episodes);
     }
 
-    public void saveToDatabase(RestTemplate restTemplate) {
+    @Scheduled(cron = "0 2 21 1 * ?")
+    public void saveToDatabase() {
         PageEpisode pageEpisode = restTemplate.getForObject(EPISODE_URL, PageEpisode.class);
         List<PageEpisode> pageEpisodeList = new ArrayList<>();
         while (true) {

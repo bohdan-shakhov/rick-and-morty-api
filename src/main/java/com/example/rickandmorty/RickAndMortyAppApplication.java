@@ -10,10 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableCaching
+@EnableScheduling
 public class RickAndMortyAppApplication {
     private static final Logger LOGGER = Logger.getLogger(RickAndMortyAppApplication.class);
     public static void main(String[] args) {
@@ -28,15 +30,14 @@ public class RickAndMortyAppApplication {
     @Bean
     CommandLineRunner runner(EpisodeService episodeService,
                              CharacterService characterService,
-                             LocationService locationService,
-                             RestTemplate restTemplate) {
+                             LocationService locationService) {
         return args -> {
-//            LOGGER.info("start saving locations to database");
-//            locationService.saveToDatabase(restTemplate);
-//            LOGGER.info("start saving episodes to database");
-//            episodeService.saveToDatabase(restTemplate);
-//            LOGGER.info("start saving characters to database");
-//            characterService.saveToDatabase(restTemplate);
+            LOGGER.info("start saving locations to database");
+            locationService.saveToDatabase();
+            LOGGER.info("start saving episodes to database");
+            episodeService.saveToDatabase();
+            LOGGER.info("start saving characters to database");
+            characterService.saveToDatabase();
         };
     }
 }

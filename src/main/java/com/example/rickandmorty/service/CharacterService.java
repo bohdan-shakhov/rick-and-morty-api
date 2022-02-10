@@ -32,13 +32,16 @@ public class CharacterService {
     private final CharacterRepository characterRepository;
     private final LocationRepository locationRepository;
     private final EpisodeRepository episodeRepository;
+    private final RestTemplate restTemplate;
 
     public CharacterService(CharacterRepository characterRepository,
                             LocationRepository locationRepository,
-                            EpisodeRepository episodeRepository) {
+                            EpisodeRepository episodeRepository,
+                            RestTemplate restTemplate) {
         this.characterRepository = characterRepository;
         this.locationRepository = locationRepository;
         this.episodeRepository = episodeRepository;
+        this.restTemplate = restTemplate;
     }
 
     public void save(List<Characters> characters) {
@@ -46,7 +49,8 @@ public class CharacterService {
         characterRepository.saveAll(characters);
     }
 
-    public void saveToDatabase(RestTemplate restTemplate) {
+    @Scheduled(cron = "0 4 21 1 * ?")
+    public void saveToDatabase() {
         PageCharacter pageCharacter = restTemplate.getForObject(CHARACTER_URL, PageCharacter.class);
         List<PageCharacter> pageCharacterList = new ArrayList<>();
         while (true) {

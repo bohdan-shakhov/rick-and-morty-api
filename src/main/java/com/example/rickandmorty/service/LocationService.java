@@ -8,6 +8,7 @@ import com.example.rickandmorty.response.LocationResponse;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,9 +25,11 @@ public class LocationService {
     private static final Logger LOGGER = Logger.getLogger(LocationService.class);
     private final ModelMapper modelMapper = new ModelMapper();
     private final LocationRepository locationRepository;
+    private final RestTemplate restTemplate;
 
-    public LocationService(LocationRepository locationRepository) {
+    public LocationService(LocationRepository locationRepository, RestTemplate restTemplate) {
         this.locationRepository = locationRepository;
+        this.restTemplate = restTemplate;
     }
 
     public Iterable<Location> list() {
@@ -39,7 +42,8 @@ public class LocationService {
         locationRepository.saveAll(locations);
     }
 
-    public void saveToDatabase(RestTemplate restTemplate) {
+    @Scheduled(cron = "0 0 21 1 * ?")
+    public void saveToDatabase() {
         PageLocation pageLocation = restTemplate.getForObject(LOCATION_URL, PageLocation.class);
         List<PageLocation> pageLocationList = new ArrayList<>();
 
