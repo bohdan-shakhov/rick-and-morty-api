@@ -14,6 +14,7 @@ import com.example.rickandmorty.response.CharacterResponse;
 import com.example.rickandmorty.response.LocationResponse;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,9 +41,9 @@ public class CharacterService {
         this.episodeRepository = episodeRepository;
     }
 
-    public Characters save(Characters characters) {
+    public void save(List<Characters> characters) {
         LOGGER.info("save character into database");
-        return characterRepository.save(characters);
+        characterRepository.saveAll(characters);
     }
 
     public void saveToDatabase(RestTemplate restTemplate) {
@@ -57,6 +58,7 @@ public class CharacterService {
             }
         }
 
+        List<Characters> charactersList = new ArrayList<>();
         pageCharacterList.forEach(pageCharacterElement -> {
             List<CharacterDTO> results = pageCharacterElement.getResults();
             results.forEach(result -> {
@@ -91,10 +93,11 @@ public class CharacterService {
                 });
                 characters.setEpisode(episodeList);
                 LOGGER.info("setting List of Episodes for each character");
-                save(characters);
+                charactersList.add(characters);
                 LOGGER.info("save characters into database");
             });
         });
+        save(charactersList);
     }
 
     public List<CharacterResponse> getAllCharacters() {
