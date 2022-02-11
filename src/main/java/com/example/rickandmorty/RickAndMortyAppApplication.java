@@ -1,5 +1,6 @@
 package com.example.rickandmorty;
 
+import com.example.rickandmorty.backup.BackupDatabase;
 import com.example.rickandmorty.service.CharacterService;
 import com.example.rickandmorty.service.EpisodeService;
 import com.example.rickandmorty.service.LocationService;
@@ -30,7 +31,8 @@ public class RickAndMortyAppApplication {
     @Bean
     CommandLineRunner runner(EpisodeService episodeService,
                              CharacterService characterService,
-                             LocationService locationService) {
+                             LocationService locationService,
+                             BackupDatabase backupDatabase) {
         return args -> {
             LOGGER.info("start saving locations to database");
             locationService.saveToDatabase();
@@ -38,6 +40,9 @@ public class RickAndMortyAppApplication {
             episodeService.saveToDatabase();
             LOGGER.info("start saving characters to database");
             characterService.saveToDatabase();
+
+//            backupDatabase.backup();
+//            backupDatabase.restore();
         };
     }
 }
