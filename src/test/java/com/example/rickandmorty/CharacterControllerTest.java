@@ -48,6 +48,18 @@ class CharacterControllerTest {
     }
 
     @Test
+    void getCountOfFilteredCharactersReturned2xxStatus() throws Exception {
+        this.mockMvc.perform(get("/character/filtered_by_species_status_gender"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getMostPopularPlanetReturned2xxStatus() throws Exception {
+        this.mockMvc.perform(get("/character/planet"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void verifyNumberOfCharactersInResponseBodyWhenGetOneCharacter() throws Exception {
         this.mockMvc.perform(get("/character/21"))
                 .andExpect(status().isOk())
@@ -120,5 +132,23 @@ class CharacterControllerTest {
                 .andReturn();
 
         assertEquals("application/json", mvcResult.getResponse().getContentType());
+    }
+
+    @Test
+    void verifyContentOfResponseBodyWhenGetCountOfFilteredCharacters() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/character/filtered_by_species_status_gender"))
+                .andExpect(jsonPath("$").value(91))
+                .andReturn();
+
+        assertEquals("application/json", mvcResult.getResponse().getContentType());
+    }
+
+    @Test
+    void verifyContentOfResponseBodyWhenGetMostPopularPlanet() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/character/planet"))
+                .andExpect(jsonPath("$").value("Earth (Replacement Dimension)"))
+                .andReturn();
+
+        assertEquals("text/plain;charset=UTF-8", mvcResult.getResponse().getContentType());
     }
 }

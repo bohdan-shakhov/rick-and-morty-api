@@ -48,6 +48,12 @@ class EpisodeControllerTest {
     }
 
     @Test
+    void getMostFrequentlyCharactersReturned2xxStatus() throws Exception {
+        this.mockMvc.perform(get("/episode/frequently_characters"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void verifyNumberOfEpisodesInResponseBodyWhenGetOneEpisode() throws Exception {
         this.mockMvc.perform(get("/episode/51"))
                 .andExpect(status().isOk())
@@ -108,6 +114,19 @@ class EpisodeControllerTest {
                 .andExpect(jsonPath("$[50].episode").value("S05E10"))
                 .andExpect(jsonPath("$[50].name").value("Rickmurai Jack"))
                 .andExpect(jsonPath("$[50].url").value("https://rickandmortyapi.com/api/episode/51"))
+                .andReturn();
+
+        assertEquals("application/json", mvcResult.getResponse().getContentType());
+    }
+
+    @Test
+    void verifyContentOfResponseBodyWhenGetMostFrequentlyCharacters() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/episode/frequently_characters"))
+                .andExpect(jsonPath("$[0]").value("Morty Smith"))
+                .andExpect(jsonPath("$[1]").value("Rick Sanchez"))
+                .andExpect(jsonPath("$[2]").value("Beth Smith"))
+                .andExpect(jsonPath("$[3]").value("Summer Smith"))
+                .andExpect(jsonPath("$[4]").value("Jerry Smith"))
                 .andReturn();
 
         assertEquals("application/json", mvcResult.getResponse().getContentType());
