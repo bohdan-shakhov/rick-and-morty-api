@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.LOCATION_URL;
 
@@ -49,8 +49,8 @@ public class LocationService {
 
         while (true) {
             pageLocationList.add(pageLocation);
-            pageLocation = restTemplate.getForObject(pageLocation.getInfo().getNext(), PageLocation.class);
-            if (pageLocation.getInfo().getNext() == null) {
+            pageLocation = restTemplate.getForObject(Objects.requireNonNull(pageLocation).getInfo().getNext(), PageLocation.class);
+            if (Objects.requireNonNull(pageLocation).getInfo().getNext() == null) {
                 pageLocationList.add(pageLocation);
                 break;
             }
@@ -72,10 +72,7 @@ public class LocationService {
     @Cacheable("locations")
     public List<LocationResponse> getAllLocations() {
         LOGGER.debug("getAllLocations() method");
-        return LongStream.iterate(1, i -> i + 1)
-                .mapToObj(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
-                .filter(Objects::nonNull)
-                .limit(locationRepository.count())
+        return Stream.of(locationRepository.findAll())
                 .map(location -> modelMapper.map(location, LocationResponse.class))
                 .collect(Collectors.toList());
     }

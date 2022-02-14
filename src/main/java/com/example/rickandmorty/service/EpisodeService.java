@@ -13,12 +13,12 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.EPISODE_URL;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class EpisodeService {
@@ -53,8 +53,8 @@ public class EpisodeService {
         List<PageEpisode> pageEpisodeList = new ArrayList<>();
         while (true) {
             pageEpisodeList.add(pageEpisode);
-            pageEpisode = restTemplate.getForObject(pageEpisode.getInfo().getNext(), PageEpisode.class);
-            if (pageEpisode.getInfo().getNext() == null) {
+            pageEpisode = restTemplate.getForObject(Objects.requireNonNull(pageEpisode).getInfo().getNext(), PageEpisode.class);
+            if (Objects.requireNonNull(pageEpisode).getInfo().getNext() == null) {
                 pageEpisodeList.add(pageEpisode);
                 break;
             }

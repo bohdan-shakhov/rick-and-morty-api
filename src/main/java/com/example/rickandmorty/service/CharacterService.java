@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.CHARACTER_URL;
@@ -56,8 +55,8 @@ public class CharacterService {
         List<PageCharacter> pageCharacterList = new ArrayList<>();
         while (true) {
             pageCharacterList.add(pageCharacter);
-            pageCharacter = restTemplate.getForObject(pageCharacter.getInfo().getNext(), PageCharacter.class);
-            if (pageCharacter.getInfo().getNext() == null) {
+            pageCharacter = restTemplate.getForObject(Objects.requireNonNull(pageCharacter).getInfo().getNext(), PageCharacter.class);
+            if (Objects.requireNonNull(pageCharacter).getInfo().getNext() == null) {
                 pageCharacterList.add(pageCharacter);
                 break;
             }
@@ -79,10 +78,10 @@ public class CharacterService {
                 Optional<Location> location = locationRepository.findByName(characters.getLocation().getName());
                 Optional<Location> origin = locationRepository.findByName(characters.getOrigin().getName());
 
-                if (!origin.isPresent()) {
+                if (origin.isEmpty()) {
                     characters.setOrigin(null);
                 }
-                if (!location.isPresent()) {
+                if (location.isEmpty()) {
                     characters.setLocation(null);
                 }
                 origin.ifPresent(characters::setOrigin);
@@ -107,9 +106,7 @@ public class CharacterService {
 
     public List<CharacterResponse> getAllCharacters() {
         LOGGER.debug("getAllCharacters() method");
-        return LongStream.iterate(1, i -> i + 1)
-                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
-                .filter(Objects::nonNull)
+        return Stream.of(characterRepository.findAll())
                 .limit(characterRepository.count())
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .collect(Collectors.toList());
