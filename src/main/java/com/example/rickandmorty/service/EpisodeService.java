@@ -78,7 +78,7 @@ public class EpisodeService {
         return LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
-                .limit(51)
+                .limit(episodeRepository.count())
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
                 .collect(Collectors.toList());
     }
@@ -97,7 +97,7 @@ public class EpisodeService {
         Stream<List<String>> listStream = LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
-                .limit(51)
+                .limit(episodeRepository.count())
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
                 .map(EpisodeResponse::getCharacters);
 

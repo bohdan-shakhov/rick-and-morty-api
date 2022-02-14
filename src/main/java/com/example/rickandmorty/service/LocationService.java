@@ -75,7 +75,7 @@ public class LocationService {
         return LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
-                .limit(126)
+                .limit(locationRepository.count())
                 .map(location -> modelMapper.map(location, LocationResponse.class))
                 .collect(Collectors.toList());
     }

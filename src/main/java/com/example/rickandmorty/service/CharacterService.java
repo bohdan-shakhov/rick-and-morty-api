@@ -109,7 +109,7 @@ public class CharacterService {
         return LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
-                .limit(826)
+                .limit(characterRepository.count())
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .collect(Collectors.toList());
     }
@@ -127,7 +127,7 @@ public class CharacterService {
         return LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
-                .limit(826)
+                .limit(characterRepository.count())
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .filter(characterResponse -> characterResponse.getGender().equals("MALE"))
                 .filter(characterResponse -> characterResponse.getStatus().equals("DEAD"))
@@ -139,7 +139,7 @@ public class CharacterService {
         return LongStream.iterate(1, i -> i + 1)
                 .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
-                .limit(826)
+                .limit(characterRepository.count())
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .map(CharacterResponse::getOrigin)
                 .filter(Objects::nonNull)
