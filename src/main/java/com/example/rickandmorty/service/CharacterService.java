@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.CHARACTER_URL;
 
@@ -124,10 +125,7 @@ public class CharacterService {
     }
 
     public Long getCountOfCharactersWithStatusSpeciesGender() {
-        return LongStream.iterate(1, i -> i + 1)
-                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
-                .filter(Objects::nonNull)
-                .limit(characterRepository.count())
+        return Stream.of(characterRepository.findAll())
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .filter(characterResponse -> characterResponse.getGender().equals("MALE"))
                 .filter(characterResponse -> characterResponse.getStatus().equals("DEAD"))
@@ -136,14 +134,11 @@ public class CharacterService {
     }
 
     public String getMostPopularOriginPlanet() {
-        return LongStream.iterate(1, i -> i + 1)
-                .mapToObj(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
-                .filter(Objects::nonNull)
-                .limit(characterRepository.count())
+        return Stream.of(characterRepository.findAll())
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .map(CharacterResponse::getOrigin)
                 .filter(Objects::nonNull)
-                .filter(locationResponse -> locationResponse.getType().equals("Planet"))
+                .filter(locationResponse -> "Planet".equals(locationResponse.getType()))
                 .collect(Collectors.groupingBy(LocationResponse::getName, Collectors.counting()))
                 .entrySet().stream().max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey).orElse(null);

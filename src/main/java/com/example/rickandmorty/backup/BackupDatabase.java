@@ -3,6 +3,7 @@ package com.example.rickandmorty.backup;
 import com.smattme.MysqlExportService;
 import com.smattme.MysqlImportService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +20,21 @@ import java.util.Properties;
 public class BackupDatabase {
     private static final Logger LOGGER = Logger.getLogger(BackupDatabase.class);
 
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+
     @Scheduled(cron = "0 3 * * * ?")
     public void backup() {
         LOGGER.info("-------------------BACKUP--------------------");
         Properties properties = new Properties();
+
         properties.setProperty(MysqlExportService.DB_NAME, "test");
-        properties.setProperty(MysqlExportService.DB_USERNAME, "acolyte");
-        properties.setProperty(MysqlExportService.DB_PASSWORD, "marvel10");
+        properties.setProperty(MysqlExportService.DB_USERNAME, username);
+        properties.setProperty(MysqlExportService.DB_PASSWORD, password);
         properties.setProperty(MysqlExportService.TEMP_DIR, new File("backup").getPath());
         properties.setProperty(MysqlExportService.PRESERVE_GENERATED_ZIP, "true");
         properties.setProperty(MysqlExportService.PRESERVE_GENERATED_SQL_FILE, "true");
@@ -40,7 +49,6 @@ public class BackupDatabase {
         }
     }
 
-    @Scheduled(cron = "0 3 1 * * ?")
     public void restore() {
         LOGGER.info("---------------RESTORE-------------------------");
         String sql = null;
@@ -59,8 +67,8 @@ public class BackupDatabase {
             MysqlImportService.builder()
                     .setDatabase("test")
                     .setSqlString(sql)
-                    .setUsername("acolyte")
-                    .setPassword("marvel10")
+                    .setUsername(username)
+                    .setPassword(password)
                     .setDeleteExisting(true)
                     .setDropExisting(true)
                     .importDatabase();

@@ -74,17 +74,14 @@ public class EpisodeService {
     }
 
     public List<EpisodeResponse> getAllEpisodes() {
-        LOGGER.debug("getAllEpisodes() method");
-        return LongStream.iterate(1, i -> i + 1)
-                .mapToObj(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
-                .filter(Objects::nonNull)
-                .limit(episodeRepository.count())
+        LOGGER.info("getAllEpisodes() method");
+        return Stream.of(episodeRepository.findAll())
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
                 .collect(Collectors.toList());
     }
 
     public List<EpisodeResponse> getEpisodesByIds(List<String> ids) {
-        LOGGER.debug("getEpisodesByIds(List<String> ids) method. ID(S): " + ids);
+        LOGGER.info("getEpisodesByIds(List<String> ids) method. ID(S): " + ids);
         return ids.stream()
                 .map(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
@@ -93,22 +90,15 @@ public class EpisodeService {
     }
 
     public List<String> getTopFiveMostFrequentlyCharacters() {
-        List<String> mostPopularCharacters = new ArrayList<>();
-        Stream<List<String>> listStream = LongStream.iterate(1, i -> i + 1)
-                .mapToObj(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
-                .filter(Objects::nonNull)
-                .limit(episodeRepository.count())
+        return Stream.of(episodeRepository.findAll())
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
-                .map(EpisodeResponse::getCharacters);
-
-        listStream.forEach(mostPopularCharacters::addAll);
-        return mostPopularCharacters.stream()
+                .map(EpisodeResponse::getCharacters)
+                .flatMap(Collection::stream)
                 .collect(groupingBy(identity(), counting()))
                 .entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .map(Map.Entry::getKey)
                 .limit(5)
                 .collect(Collectors.toList());
-
     }
 }

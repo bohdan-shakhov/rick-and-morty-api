@@ -41,8 +41,8 @@ public class RickAndMortyAppApplication {
             LOGGER.info("start saving characters to database");
             characterService.saveToDatabase();
 
-//            backupDatabase.backup();
-//            backupDatabase.restore();
+            backupDatabase.backup();
+            backupDatabase.restore();
         };
     }
 }
