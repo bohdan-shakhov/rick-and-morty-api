@@ -2,7 +2,7 @@ package com.example.rickandmorty.controller;
 
 import com.example.rickandmorty.response.CharacterResponse;
 import com.example.rickandmorty.service.CharacterService;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/character")
 public class CharacterController {
-    private static final Logger LOGGER = Logger.getLogger(CharacterController.class);
     private final CharacterService characterService;
 
     @Autowired
     public CharacterController(CharacterService characterService) {
         this.characterService = characterService;
-        LOGGER.info("autowired" + CharacterService.class.getName() + " into " + CharacterController.class.getName());
+        log.info("autowired {} into {}", CharacterService.class.getName(), CharacterController.class.getName());
     }
 
     @GetMapping()
@@ -28,10 +28,10 @@ public class CharacterController {
         List<CharacterResponse> characters = null;
         try {
             characters = characterService.getAllCharacters();
-            LOGGER.info("getting all characters from response body");
+            log.info("getting all characters from response body");
             return characters;
         } catch (Exception e) {
-            LOGGER.error("error to get all characters", e);
+            log.error("error to get all characters", e);
         }
         return characters;
     }
@@ -41,10 +41,10 @@ public class CharacterController {
         List<CharacterResponse> characters = null;
         try {
             characters = characterService.getCharactersByIds(ids);
-            LOGGER.info(CharacterController.class.getName() + " getting characters by id/ids " + ids);
+            log.info("getting characters by id/ids {}", ids);
             return characters;
         } catch (Exception e) {
-            LOGGER.error("error to get characters by id/ids " + ids, e);
+            log.error("error to get characters by id/ids {}", ids, e);
         }
         return characters;
     }

@@ -2,7 +2,7 @@ package com.example.rickandmorty.controller;
 
 import com.example.rickandmorty.response.LocationResponse;
 import com.example.rickandmorty.service.LocationService;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/location")
 public class LocationController {
-    private static final Logger LOGGER = Logger.getLogger(LocationController.class);
     private final LocationService locationService;
 
     @Autowired
     public LocationController(LocationService locationService) {
         this.locationService = locationService;
-        LOGGER.info("autowired " + LocationService.class.getName() + " into " + LocationController.class.getName());
+        log.info("autowired {} into {}", LocationService.class.getName(), LocationController.class.getName());
     }
 
     @GetMapping()
@@ -28,10 +28,10 @@ public class LocationController {
         List<LocationResponse> locations = null;
         try {
             locations = locationService.getAllLocations();
-            LOGGER.info(LocationController.class.getName() + " getting all locations in response body");
+            log.info(LocationController.class.getName() + " getting all locations in response body");
             return locations;
         } catch (Exception e) {
-            LOGGER.error("error to get all locations", e);
+            log.error("error to get all locations", e);
         }
         return locations;
     }
@@ -41,10 +41,10 @@ public class LocationController {
         List<LocationResponse> locations = null;
         try {
             locations = locationService.getLocationsByIds(ids);
-            LOGGER.info(LocationController.class.getName() + " getting locations by id/ids " + ids);
+            log.info("getting locations by id/ids {}", ids);
             return locations;
         } catch (Exception e) {
-            LOGGER.error("error to get locations by id/ids " + ids, e);
+            log.error("error to get locations by id/ids {}", ids, e);
         }
         return locations;
     }

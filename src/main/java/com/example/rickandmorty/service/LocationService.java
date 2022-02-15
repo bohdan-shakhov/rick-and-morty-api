@@ -5,7 +5,7 @@ import com.example.rickandmorty.dto.location.PageLocation;
 import com.example.rickandmorty.entity.Location;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,9 +21,9 @@ import java.util.stream.Stream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.LOCATION_URL;
 
+@Slf4j
 @Service
 public class LocationService {
-    private static final Logger LOGGER = Logger.getLogger(LocationService.class);
     private final ModelMapper modelMapper = new ModelMapper();
     private final LocationRepository locationRepository;
     private final RestTemplate restTemplate;
@@ -34,12 +34,12 @@ public class LocationService {
     }
 
     public Iterable<Location> list() {
-        LOGGER.info("getting all locations from database");
+        log.info("getting all locations from database");
         return locationRepository.findAll();
     }
 
     public void save(List<Location> locations) {
-        LOGGER.info("save List of locations (all) into database");
+        log.info("save List of locations (all) into database");
         locationRepository.saveAll(locations);
     }
 
@@ -63,16 +63,15 @@ public class LocationService {
             results.forEach(result -> {
                 Location location = modelMapper.map(result, Location.class);
                 locations.add(location);
-                LOGGER.info("getting results of each locations and map to entity");
             });
         });
         save(locations);
-        LOGGER.info("save locations entities to database");
+        log.info("save locations entities to database");
     }
 
     @Cacheable("locations")
     public List<LocationResponse> getAllLocations() {
-        LOGGER.debug("getAllLocations() method");
+        log.info("getAllLocations() method");
         return Stream.of(locationRepository.findAll())
                 .flatMap(Collection::stream)
                 .map(location -> modelMapper.map(location, LocationResponse.class))
@@ -81,7 +80,7 @@ public class LocationService {
 
     @Cacheable("locations")
     public List<LocationResponse> getLocationsByIds(List<String> ids) {
-        LOGGER.debug("getLocationsByIds(List<String> ids) method. ID(S): " + ids);
+        log.info("getLocationsByIds(List<String> ids) method. ID(S): {}", ids);
         return ids.stream()
                 .map(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)

@@ -2,7 +2,7 @@ package com.example.rickandmorty.controller;
 
 import com.example.rickandmorty.response.EpisodeResponse;
 import com.example.rickandmorty.service.EpisodeService;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/episode")
 public class EpisodeController {
-    private static final Logger LOGGER = Logger.getLogger(EpisodeController.class);
     private final EpisodeService episodeService;
 
     @Autowired
     public EpisodeController(EpisodeService episodeService) {
         this.episodeService = episodeService;
-        LOGGER.info("autowired " + EpisodeService.class.getName() + " into " + EpisodeController.class.getName());
+        log.info("autowired {} into {}", EpisodeService.class.getName(), EpisodeController.class.getName());
     }
 
     @GetMapping()
@@ -28,10 +28,10 @@ public class EpisodeController {
         List<EpisodeResponse> episodes = null;
         try {
             episodes = episodeService.getAllEpisodes();
-            LOGGER.info(EpisodeController.class.getName() + " getting all episodes in response body");
+            log.info("getting all episodes in response body - {}", EpisodeController.class.getName());
             return episodes;
         } catch (Exception e) {
-            LOGGER.error("error to get all episodes", e);
+            log.error("error to get all episodes", e);
         }
         return episodes;
     }
@@ -41,10 +41,10 @@ public class EpisodeController {
         List<EpisodeResponse> episodes = null;
         try {
             episodes = episodeService.getEpisodesByIds(ids);
-            LOGGER.info(EpisodeController.class.getName() + " getting episodes by id/ids " + ids);
+            log.info("{} - getting episodes by id/ids {}", EpisodeController.class.getName(), ids);
             return episodes;
         } catch (Exception e) {
-            LOGGER.error("error to get episodes by id/ids " + ids, e);
+            log.error("error to get episodes by id/ids {}", ids, e);
         }
         return episodes;
     }

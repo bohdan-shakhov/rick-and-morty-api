@@ -12,7 +12,7 @@ import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.CharacterResponse;
 import com.example.rickandmorty.response.LocationResponse;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 import static com.example.rickandmorty.constant.ProgrammConstant.CHARACTER_URL;
 
 @Service
+@Slf4j
 public class CharacterService {
-    private static final Logger LOGGER = Logger.getLogger(CharacterService.class);
     private final ModelMapper modelMapper = new ModelMapper();
 
     private final CharacterRepository characterRepository;
@@ -45,7 +45,7 @@ public class CharacterService {
     }
 
     public void save(List<Characters> characters) {
-        LOGGER.info("save character into database");
+        log.info("save character into database");
         characterRepository.saveAll(characters);
     }
 
@@ -67,13 +67,9 @@ public class CharacterService {
             List<CharacterDTO> results = pageCharacterElement.getResults();
             results.forEach(result -> {
                 Characters characters = modelMapper.map(result, Characters.class);
-                LOGGER.info("getting results of each episodes and map to entity");
 
                 characters.setStatus(Status.valueOf(result.getStatus().toUpperCase(Locale.ROOT)));
-                LOGGER.info("setting Status for character");
                 characters.setGender(Gender.valueOf(result.getGender().toUpperCase(Locale.ROOT)));
-                LOGGER.info("setting Gender for character");
-
 
                 Optional<Location> location = locationRepository.findByName(characters.getLocation().getName());
                 Optional<Location> origin = locationRepository.findByName(characters.getOrigin().getName());
@@ -85,27 +81,23 @@ public class CharacterService {
                     characters.setLocation(null);
                 }
                 origin.ifPresent(characters::setOrigin);
-                LOGGER.info("setting Origin of character from location database (if exist)");
                 location.ifPresent(characters::setLocation);
-                LOGGER.info("setting Location of character from location database (if exist)");
 
                 List<Episode> episodeList = new ArrayList<>();
                 result.getEpisode().forEach(episode -> {
                     Optional<Episode> optionalEpisode = episodeRepository.findByUrl(episode);
                     optionalEpisode.ifPresent(episodeList::add);
-                    LOGGER.info("find Episodes for each character");
                 });
                 characters.setEpisode(episodeList);
-                LOGGER.info("setting List of Episodes for each character");
                 charactersList.add(characters);
-                LOGGER.info("save characters into database");
+                log.info("save characters into database");
             });
         });
         save(charactersList);
     }
 
     public List<CharacterResponse> getAllCharacters() {
-        LOGGER.debug("getAllCharacters() method");
+        log.info("getAllCharacters() method");
         return Stream.of(characterRepository.findAll())
                 .flatMap(Collection::stream)
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
@@ -113,7 +105,7 @@ public class CharacterService {
     }
 
     public List<CharacterResponse> getCharactersByIds(List<String> ids) {
-        LOGGER.debug("getCharactersByIds() method. ID(S): " + ids);
+        log.info("getCharactersByIds() method. ID(S): {}", ids);
         return ids.stream()
                 .map(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
