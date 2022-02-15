@@ -2,15 +2,18 @@ package com.example.rickandmorty.entity;
 
 import com.example.rickandmorty.enums.Gender;
 import com.example.rickandmorty.enums.Status;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
-@Data
+@NoArgsConstructor
 public class Characters {
 
     @Id

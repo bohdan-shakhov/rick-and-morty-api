@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -73,6 +74,7 @@ public class LocationService {
     public List<LocationResponse> getAllLocations() {
         LOGGER.debug("getAllLocations() method");
         return Stream.of(locationRepository.findAll())
+                .flatMap(Collection::stream)
                 .map(location -> modelMapper.map(location, LocationResponse.class))
                 .collect(Collectors.toList());
     }

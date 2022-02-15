@@ -34,12 +34,7 @@ public class EpisodeService {
 
     public List<Episode> list() {
         LOGGER.info("getting all episodes from database");
-        List<Episode> episodes = new ArrayList<>();
-        for (Episode episode : episodeRepository.findAll()) {
-            episodes.add(episode);
-        }
-
-        return episodes;
+        return new ArrayList<>(episodeRepository.findAll());
     }
 
     public void save(List<Episode> episodes) {
@@ -76,6 +71,7 @@ public class EpisodeService {
     public List<EpisodeResponse> getAllEpisodes() {
         LOGGER.info("getAllEpisodes() method");
         return Stream.of(episodeRepository.findAll())
+                .flatMap(Collection::stream)
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
                 .collect(Collectors.toList());
     }
@@ -91,6 +87,7 @@ public class EpisodeService {
 
     public List<String> getTopFiveMostFrequentlyCharacters() {
         return Stream.of(episodeRepository.findAll())
+                .flatMap(Collection::stream)
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
                 .map(EpisodeResponse::getCharacters)
                 .flatMap(Collection::stream)

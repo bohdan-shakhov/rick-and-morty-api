@@ -1,13 +1,16 @@
 package com.example.rickandmorty.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
+@NoArgsConstructor
 public class Location {
 
     @Id
@@ -22,5 +25,4 @@ public class Location {
     private List<Characters> residents;
 
     private LocalDateTime created;
-
 }

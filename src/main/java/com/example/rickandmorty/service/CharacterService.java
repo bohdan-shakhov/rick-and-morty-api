@@ -107,7 +107,7 @@ public class CharacterService {
     public List<CharacterResponse> getAllCharacters() {
         LOGGER.debug("getAllCharacters() method");
         return Stream.of(characterRepository.findAll())
-                .limit(characterRepository.count())
+                .flatMap(Collection::stream)
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .collect(Collectors.toList());
     }
@@ -123,6 +123,7 @@ public class CharacterService {
 
     public Long getCountOfCharactersWithStatusSpeciesGender() {
         return Stream.of(characterRepository.findAll())
+                .flatMap(Collection::stream)
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .filter(characterResponse -> characterResponse.getGender().equals("MALE"))
                 .filter(characterResponse -> characterResponse.getStatus().equals("DEAD"))
@@ -132,6 +133,7 @@ public class CharacterService {
 
     public String getMostPopularOriginPlanet() {
         return Stream.of(characterRepository.findAll())
+                .flatMap(Collection::stream)
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .map(CharacterResponse::getOrigin)
                 .filter(Objects::nonNull)
