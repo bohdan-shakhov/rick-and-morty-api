@@ -12,7 +12,6 @@ import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.CharacterResponse;
 import com.example.rickandmorty.response.LocationResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import java.util.stream.Stream;
 import static com.example.rickandmorty.constant.ProgrammConstant.CHARACTER_URL;
 
 @Service
-@Slf4j
 public class CharacterService {
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -45,7 +43,6 @@ public class CharacterService {
     }
 
     public void save(List<Characters> characters) {
-        log.info("save character into database");
         characterRepository.saveAll(characters);
     }
 
@@ -90,14 +87,12 @@ public class CharacterService {
                 });
                 characters.setEpisode(episodeList);
                 charactersList.add(characters);
-                log.info("save characters into database");
             });
         });
         save(charactersList);
     }
 
     public List<CharacterResponse> getAllCharacters() {
-        log.info("getAllCharacters() method");
         return Stream.of(characterRepository.findAll())
                 .flatMap(Collection::stream)
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
@@ -105,7 +100,6 @@ public class CharacterService {
     }
 
     public List<CharacterResponse> getCharactersByIds(List<String> ids) {
-        log.info("getCharactersByIds() method. ID(S): {}", ids);
         return ids.stream()
                 .map(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)

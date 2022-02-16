@@ -5,7 +5,6 @@ import com.example.rickandmorty.dto.episode.PageEpisode;
 import com.example.rickandmorty.entity.Episode;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.response.EpisodeResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
 @Service
-@Slf4j
 public class EpisodeService {
     private final ModelMapper modelMapper = new ModelMapper();
     private final EpisodeRepository episodeRepository;
@@ -33,12 +31,10 @@ public class EpisodeService {
     }
 
     public List<Episode> list() {
-        log.info("getting all episodes from database");
         return new ArrayList<>(episodeRepository.findAll());
     }
 
     public void save(List<Episode> episodes) {
-        log.info("save List of episodes (all) into database");
         episodeRepository.saveAll(episodes);
     }
 
@@ -67,7 +63,6 @@ public class EpisodeService {
     }
 
     public List<EpisodeResponse> getAllEpisodes() {
-        log.info("getAllEpisodes() method");
         return Stream.of(episodeRepository.findAll())
                 .flatMap(Collection::stream)
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
@@ -75,7 +70,6 @@ public class EpisodeService {
     }
 
     public List<EpisodeResponse> getEpisodesByIds(List<String> ids) {
-        log.info("getEpisodesByIds(List<String> ids) method. ID(S): {}", ids);
         return ids.stream()
                 .map(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)

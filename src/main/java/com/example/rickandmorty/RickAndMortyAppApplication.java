@@ -4,7 +4,6 @@ import com.example.rickandmorty.backup.BackupDatabase;
 import com.example.rickandmorty.service.CharacterService;
 import com.example.rickandmorty.service.EpisodeService;
 import com.example.rickandmorty.service.LocationService;
-import org.apache.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableCaching
 @EnableScheduling
 public class RickAndMortyAppApplication {
-    private static final Logger LOGGER = Logger.getLogger(RickAndMortyAppApplication.class);
     public static void main(String[] args) {
         SpringApplication.run(RickAndMortyAppApplication.class, args);
     }
@@ -34,11 +32,8 @@ public class RickAndMortyAppApplication {
                              LocationService locationService,
                              BackupDatabase backupDatabase) {
         return args -> {
-            LOGGER.info("start saving locations to database");
             locationService.saveToDatabase();
-            LOGGER.info("start saving episodes to database");
             episodeService.saveToDatabase();
-            LOGGER.info("start saving characters to database");
             characterService.saveToDatabase();
 
 //            backupDatabase.backup();

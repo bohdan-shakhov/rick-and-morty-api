@@ -5,7 +5,6 @@ import com.example.rickandmorty.dto.location.PageLocation;
 import com.example.rickandmorty.entity.Location;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +20,6 @@ import java.util.stream.Stream;
 
 import static com.example.rickandmorty.constant.ProgrammConstant.LOCATION_URL;
 
-@Slf4j
 @Service
 public class LocationService {
     private final ModelMapper modelMapper = new ModelMapper();
@@ -34,12 +32,10 @@ public class LocationService {
     }
 
     public Iterable<Location> list() {
-        log.info("getting all locations from database");
         return locationRepository.findAll();
     }
 
     public void save(List<Location> locations) {
-        log.info("save List of locations (all) into database");
         locationRepository.saveAll(locations);
     }
 
@@ -66,12 +62,10 @@ public class LocationService {
             });
         });
         save(locations);
-        log.info("save locations entities to database");
     }
 
     @Cacheable("locations")
     public List<LocationResponse> getAllLocations() {
-        log.info("getAllLocations() method");
         return Stream.of(locationRepository.findAll())
                 .flatMap(Collection::stream)
                 .map(location -> modelMapper.map(location, LocationResponse.class))
@@ -80,7 +74,6 @@ public class LocationService {
 
     @Cacheable("locations")
     public List<LocationResponse> getLocationsByIds(List<String> ids) {
-        log.info("getLocationsByIds(List<String> ids) method. ID(S): {}", ids);
         return ids.stream()
                 .map(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
                 .filter(Objects::nonNull)
