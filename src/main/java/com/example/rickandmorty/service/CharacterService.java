@@ -7,6 +7,7 @@ import com.example.rickandmorty.entity.Episode;
 import com.example.rickandmorty.entity.Location;
 import com.example.rickandmorty.enums.Gender;
 import com.example.rickandmorty.enums.Status;
+import com.example.rickandmorty.exception_handling.NoSuchDataException;
 import com.example.rickandmorty.repository.CharacterRepository;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.repository.LocationRepository;
@@ -101,7 +102,8 @@ public class CharacterService {
 
     public List<CharacterResponse> getCharactersByIds(List<String> ids) {
         return ids.stream()
-                .map(id -> characterRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .map(id -> characterRepository.findById(Long.valueOf(id))
+                        .orElseThrow(() -> new NoSuchDataException("There is no character with id " + id + " in database")))
                 .filter(Objects::nonNull)
                 .map(character -> modelMapper.map(character, CharacterResponse.class))
                 .collect(Collectors.toList());

@@ -3,6 +3,7 @@ package com.example.rickandmorty.service;
 import com.example.rickandmorty.dto.location.LocationDTO;
 import com.example.rickandmorty.dto.location.PageLocation;
 import com.example.rickandmorty.entity.Location;
+import com.example.rickandmorty.exception_handling.NoSuchDataException;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
 import org.modelmapper.ModelMapper;
@@ -75,7 +76,8 @@ public class LocationService {
     @Cacheable("locations")
     public List<LocationResponse> getLocationsByIds(List<String> ids) {
         return ids.stream()
-                .map(id -> locationRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .map(id -> locationRepository.findById(Long.valueOf(id))
+                        .orElseThrow(() -> new NoSuchDataException("There is no location with id " + id + " in database")))
                 .filter(Objects::nonNull)
                 .map(location -> modelMapper.map(location, LocationResponse.class))
                 .collect(Collectors.toList());

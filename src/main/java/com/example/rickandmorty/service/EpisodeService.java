@@ -3,6 +3,7 @@ package com.example.rickandmorty.service;
 import com.example.rickandmorty.dto.episode.EpisodeDTO;
 import com.example.rickandmorty.dto.episode.PageEpisode;
 import com.example.rickandmorty.entity.Episode;
+import com.example.rickandmorty.exception_handling.NoSuchDataException;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.response.EpisodeResponse;
 import org.modelmapper.ModelMapper;
@@ -71,7 +72,8 @@ public class EpisodeService {
 
     public List<EpisodeResponse> getEpisodesByIds(List<String> ids) {
         return ids.stream()
-                .map(id -> episodeRepository.findById(Long.valueOf(id)).orElseGet(null))
+                .map(id -> episodeRepository.findById(Long.valueOf(id))
+                        .orElseThrow(() -> new NoSuchDataException("There is no episode with id " + id + " in database")))
                 .filter(Objects::nonNull)
                 .map(episode -> modelMapper.map(episode, EpisodeResponse.class))
                 .collect(Collectors.toList());
