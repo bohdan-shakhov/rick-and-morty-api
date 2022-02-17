@@ -1,13 +1,12 @@
 package com.example.rickandmorty.controller;
 
-import com.example.rickandmorty.exception_handling.IncorrectData;
-import com.example.rickandmorty.exception_handling.NoSuchDataException;
 import com.example.rickandmorty.response.EpisodeResponse;
 import com.example.rickandmorty.service.EpisodeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -36,11 +35,4 @@ public class EpisodeController {
         return episodeService.getTopFiveMostFrequentlyCharacters();
     }
 
-    @ExceptionHandler
-    public ResponseEntity<IncorrectData> handleException(NoSuchDataException exception) {
-        IncorrectData incorrectData = new IncorrectData();
-        incorrectData.setInfo(exception.getMessage());
-
-        return new ResponseEntity<>(incorrectData, HttpStatus.NOT_FOUND);
-    }
 }
