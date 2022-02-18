@@ -3,10 +3,7 @@ package com.example.rickandmorty.aspect;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -40,8 +37,8 @@ public class LoggingAspect {
 
     @AfterThrowing(pointcut = "applicationPackagePointcut() && springBeanPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName(), e.getCause() != null ? e.getCause() : "NULL");
+        log.error("Exception in {}.{}() message = {}", joinPoint.getSignature().getDeclaringTypeName(),
+                joinPoint.getSignature().getName(), e.getMessage() != null ? e.getMessage() : "NULL");
     }
 
     @Around("applicationPackagePointcut() && springBeanPointcut()")
@@ -63,4 +60,15 @@ public class LoggingAspect {
             throw e;
         }
     }
+
+    @Before("applicationPackagePointcut() && springBeanPointcut()")
+    public void setTraceUID() {
+        try {
+            response.setHeader("traceUID", UUID.randomUUID().toString());
+        } catch (IllegalArgumentException e) {
+            log.error("Error while adding UID to response for request" + request.getRequestURL());
+            throw e;
+        }
+    }
 }
+
