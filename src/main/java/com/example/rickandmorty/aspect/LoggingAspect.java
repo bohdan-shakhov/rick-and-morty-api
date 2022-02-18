@@ -7,10 +7,13 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.UUID;
 
 @Aspect
 @Component
@@ -18,9 +21,11 @@ import java.util.Arrays;
 public class LoggingAspect {
 
     private final HttpServletRequest request;
+    private final HttpServletResponse response;
 
-    public LoggingAspect(HttpServletRequest request) {
+    public LoggingAspect(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
+        this.response = response;
     }
 
     @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
@@ -45,7 +50,11 @@ public class LoggingAspect {
         try {
             Object result = joinPoint.proceed();
             if (log.isDebugEnabled()) {
-                log.info("request={}, response={}, time={} ms", request.getRequestURL(), result, System.currentTimeMillis() - start);
+                log.info("request={}, response={}, traceUID={}, time={} ms",
+                        request.getRequestURL(),
+                        result,
+                        response.getHeader("traceUID"),
+                        System.currentTimeMillis() - start);
             }
             return result;
         } catch (IllegalArgumentException e) {
