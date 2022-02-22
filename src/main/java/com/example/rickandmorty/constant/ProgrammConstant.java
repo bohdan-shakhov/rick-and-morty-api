@@ -11,4 +11,7 @@ public class ProgrammConstant {
 
     public static final String SLASH = "/";
     public static final String PAGE_REQ_PARAMETER = "?page=";
+
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
 }
