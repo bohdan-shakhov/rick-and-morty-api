@@ -1,9 +1,5 @@
 package com.example.rickandmorty.response;
 
-import com.example.rickandmorty.datework.TimeDateWork;
-
-import java.time.LocalDateTime;
-
 import static com.example.rickandmorty.constant.ProgrammConstant.*;
 
 public class LocationResponse {

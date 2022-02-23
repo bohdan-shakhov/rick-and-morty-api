@@ -1,10 +1,10 @@
-package com.example.rickandmorty.datework;
+package com.example.rickandmorty.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class TimeDateWork {
-    private TimeDateWork() {}
+public class TimeUtils {
+    private TimeUtils() {}
     public static LocalDateTime parseDateTime(String dateTime) {
         DateTimeFormatter format = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 

@@ -1,7 +1,7 @@
 
 package com.example.rickandmorty.dto.location;
 
-import com.example.rickandmorty.datework.TimeDateWork;
+import com.example.rickandmorty.util.TimeUtils;
 
 import javax.annotation.Generated;
 import java.time.LocalDateTime;
@@ -21,7 +21,7 @@ public class LocationDTO {
     }
 
     public void setCreated(String created) {
-        this.created = TimeDateWork.parseDateTime(created);
+        this.created = TimeUtils.parseDateTime(created);
     }
 
     public String getDimension() {

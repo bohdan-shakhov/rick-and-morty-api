@@ -1,7 +1,7 @@
 
 package com.example.rickandmorty.dto.episode;
 
-import com.example.rickandmorty.datework.TimeDateWork;
+import com.example.rickandmorty.util.TimeUtils;
 
 import javax.annotation.Generated;
 import java.text.DateFormat;
@@ -39,7 +39,7 @@ public class EpisodeDTO {
     }
 
     public void setCreated(String created) {
-        this.created = TimeDateWork.parseDateTime(created);
+        this.created = TimeUtils.parseDateTime(created);
     }
 
     public String getEpisode() {

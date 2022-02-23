@@ -1,7 +1,7 @@
 
 package com.example.rickandmorty.dto.character;
 
-import com.example.rickandmorty.datework.TimeDateWork;
+import com.example.rickandmorty.util.TimeUtils;
 
 import javax.annotation.Generated;
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ public class CharacterDTO {
     }
 
     public void setCreated(String created) {
-        this.created = TimeDateWork.parseDateTime(created);
+        this.created = TimeUtils.parseDateTime(created);
     }
 
     public List<String> getEpisode() {
