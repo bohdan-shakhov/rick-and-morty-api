@@ -3,6 +3,7 @@ package com.example.rickandmorty.controller;
 import com.example.rickandmorty.response.LocationResponse;
 import com.example.rickandmorty.service.LocationService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,13 @@ public class LocationController {
     private final LocationService locationService;
 
     @GetMapping()
-    public List<LocationResponse> getAllLocations() {
-        return locationService.getAllLocations();
+    public ResponseEntity<List<LocationResponse>> getAllLocations() {
+        return ResponseEntity.ok().body(locationService.getAllLocations());
     }
 
     @GetMapping("/{ids}")
-    public List<LocationResponse> getLocationsByArrayOfIds(@PathVariable List<String> ids) {
-        return locationService.getLocationsByIds(ids);
+    public ResponseEntity<List<LocationResponse>> getLocationsByArrayOfIds(@PathVariable List<String> ids) {
+        return ResponseEntity.ok().body(locationService.getLocationsByIds(ids));
     }
 
 }
