@@ -2,6 +2,7 @@ package com.example.rickandmorty.backup;
 
 import com.smattme.MysqlExportService;
 import com.smattme.MysqlImportService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,8 +18,8 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Component
+@Slf4j
 public class BackupDatabase {
-    private static final Logger LOGGER = Logger.getLogger(BackupDatabase.class);
 
     @Value("${spring.datasource.username}")
     private String username;
@@ -29,7 +30,7 @@ public class BackupDatabase {
 
     @Scheduled(cron = "0 3 * * * ?")
     public void backup() {
-        LOGGER.info("-------------------BACKUP--------------------");
+        log.info("-------------------BACKUP--------------------");
         Properties properties = new Properties();
 
         properties.setProperty(MysqlExportService.DB_NAME, "test");
@@ -41,16 +42,16 @@ public class BackupDatabase {
 
         MysqlExportService mysqlExportService = new MysqlExportService(properties);
         mysqlExportService.getGeneratedZipFile();
-        LOGGER.info("-------------------BACKUP FINISHED--------------------");
+        log.info("-------------------BACKUP FINISHED--------------------");
         try {
             mysqlExportService.export();
         } catch (IOException | SQLException | ClassNotFoundException e) {
-            LOGGER.error("Failed to backup database", e);
+            log.error("Failed to backup database", e);
         }
     }
 
     public void restore() {
-        LOGGER.info("---------------RESTORE-------------------------");
+        log.info("---------------RESTORE-------------------------");
         String sql = null;
         File dir = new File("backup/sql");
         File[] files = dir.listFiles();
@@ -59,9 +60,9 @@ public class BackupDatabase {
         }
         try {
             sql = new String(Files.readAllBytes(Paths.get(Objects.requireNonNull(files)[files.length - 1].toString())));
-            LOGGER.debug(files[files.length - 1].toString());
+            log.debug(files[files.length - 1].toString());
         } catch (IOException e) {
-            LOGGER.error("Failed to find backup file", e);
+            log.error("Failed to find backup file", e);
         }
         try {
             MysqlImportService.builder()
@@ -72,9 +73,9 @@ public class BackupDatabase {
                     .setDeleteExisting(true)
                     .setDropExisting(true)
                     .importDatabase();
-            LOGGER.info("----------------RESTORE FINISHED--------------------");
+            log.info("----------------RESTORE FINISHED--------------------");
         } catch (SQLException | ClassNotFoundException e) {
-            LOGGER.error("Failed to restore database", e);
+            log.error("Failed to restore database", e);
         }
     }
 }
