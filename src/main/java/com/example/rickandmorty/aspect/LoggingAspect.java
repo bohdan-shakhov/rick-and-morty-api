@@ -56,7 +56,7 @@ public class LoggingAspect {
         } catch (IllegalArgumentException e) {
             log.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
                     joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
-            throw e;
+            throw new RuntimeException(e.getCause());
         }
     }
 
@@ -66,7 +66,7 @@ public class LoggingAspect {
             response.setHeader("traceUID", UUID.randomUUID().toString());
         } catch (IllegalArgumentException e) {
             log.error("Error while adding UID to response for request" + request.getRequestURL());
-            throw e;
+            throw new RuntimeException(e.getCause());
         }
     }
 }
