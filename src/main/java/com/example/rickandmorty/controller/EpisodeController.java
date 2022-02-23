@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/episode")
+@RequestMapping("/api/episode")
 @AllArgsConstructor
 public class EpisodeController {
     private final EpisodeService episodeService;
