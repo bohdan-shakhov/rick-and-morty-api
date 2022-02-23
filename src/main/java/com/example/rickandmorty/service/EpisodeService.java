@@ -6,6 +6,7 @@ import com.example.rickandmorty.entity.Episode;
 import com.example.rickandmorty.exception_handling.NoSuchDataException;
 import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.response.EpisodeResponse;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -21,15 +22,11 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
 @Service
+@AllArgsConstructor
 public class EpisodeService {
     private final ModelMapper modelMapper = new ModelMapper();
     private final EpisodeRepository episodeRepository;
     private final RestTemplate restTemplate;
-
-    public EpisodeService(EpisodeRepository episodeRepository, RestTemplate restTemplate) {
-        this.episodeRepository = episodeRepository;
-        this.restTemplate = restTemplate;
-    }
 
     public List<Episode> list() {
         return new ArrayList<>(episodeRepository.findAll());

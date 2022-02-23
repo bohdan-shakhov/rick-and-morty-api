@@ -6,6 +6,7 @@ import com.example.rickandmorty.entity.Location;
 import com.example.rickandmorty.exception_handling.NoSuchDataException;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.LocationResponse;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,15 +23,11 @@ import java.util.stream.Stream;
 import static com.example.rickandmorty.constant.ProgrammConstant.LOCATION_URL;
 
 @Service
+@AllArgsConstructor
 public class LocationService {
     private final ModelMapper modelMapper = new ModelMapper();
     private final LocationRepository locationRepository;
     private final RestTemplate restTemplate;
-
-    public LocationService(LocationRepository locationRepository, RestTemplate restTemplate) {
-        this.locationRepository = locationRepository;
-        this.restTemplate = restTemplate;
-    }
 
     public Iterable<Location> list() {
         return locationRepository.findAll();
