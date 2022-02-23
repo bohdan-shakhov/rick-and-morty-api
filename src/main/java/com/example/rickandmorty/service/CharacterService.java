@@ -13,6 +13,7 @@ import com.example.rickandmorty.repository.EpisodeRepository;
 import com.example.rickandmorty.repository.LocationRepository;
 import com.example.rickandmorty.response.CharacterResponse;
 import com.example.rickandmorty.response.LocationResponse;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
 import static com.example.rickandmorty.constant.ProgrammConstant.CHARACTER_URL;
 
 @Service
+@AllArgsConstructor
 public class CharacterService {
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -32,16 +34,6 @@ public class CharacterService {
     private final LocationRepository locationRepository;
     private final EpisodeRepository episodeRepository;
     private final RestTemplate restTemplate;
-
-    public CharacterService(CharacterRepository characterRepository,
-                            LocationRepository locationRepository,
-                            EpisodeRepository episodeRepository,
-                            RestTemplate restTemplate) {
-        this.characterRepository = characterRepository;
-        this.locationRepository = locationRepository;
-        this.episodeRepository = episodeRepository;
-        this.restTemplate = restTemplate;
-    }
 
     public void save(List<Characters> characters) {
         characterRepository.saveAll(characters);
