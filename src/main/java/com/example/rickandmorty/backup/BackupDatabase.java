@@ -49,7 +49,7 @@ public class BackupDatabase {
     }
 
     public void restore() {
-        String sql = null;
+        String sql;
         File dir = new File("backup/sql");
         File[] files = dir.listFiles();
         if (files != null) {
@@ -58,10 +58,7 @@ public class BackupDatabase {
         try {
             sql = new String(Files.readAllBytes(Paths.get(Objects.requireNonNull(files)[files.length - 1].toString())));
             log.debug(files[files.length - 1].toString());
-        } catch (IOException e) {
-            log.error("Failed to find backup file", e);
-        }
-        try {
+
             MysqlImportService.builder()
                     .setDatabase("test")
                     .setSqlString(sql)
@@ -70,8 +67,11 @@ public class BackupDatabase {
                     .setDeleteExisting(true)
                     .setDropExisting(true)
                     .importDatabase();
+        } catch (IOException e) {
+            log.error("Failed to find backup file", e);
         } catch (SQLException | ClassNotFoundException e) {
             log.error("Failed to restore database", e);
         }
+
     }
 }
