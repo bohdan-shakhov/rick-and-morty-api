@@ -30,7 +30,6 @@ public class BackupDatabase {
 
     @Scheduled(cron = "0 3 * * * ?")
     public void backup() {
-        log.info("-------------------BACKUP--------------------");
         Properties properties = new Properties();
 
         properties.setProperty(MysqlExportService.DB_NAME, "test");
@@ -42,7 +41,6 @@ public class BackupDatabase {
 
         MysqlExportService mysqlExportService = new MysqlExportService(properties);
         mysqlExportService.getGeneratedZipFile();
-        log.info("-------------------BACKUP FINISHED--------------------");
         try {
             mysqlExportService.export();
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -51,7 +49,6 @@ public class BackupDatabase {
     }
 
     public void restore() {
-        log.info("---------------RESTORE-------------------------");
         String sql = null;
         File dir = new File("backup/sql");
         File[] files = dir.listFiles();
@@ -73,7 +70,6 @@ public class BackupDatabase {
                     .setDeleteExisting(true)
                     .setDropExisting(true)
                     .importDatabase();
-            log.info("----------------RESTORE FINISHED--------------------");
         } catch (SQLException | ClassNotFoundException e) {
             log.error("Failed to restore database", e);
         }
