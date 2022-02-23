@@ -7,9 +7,12 @@ import com.example.rickandmorty.enums.Status;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.*;
-
 public class CharacterResponse {
+    public static final String SLASH = "/";
+    public static final String MY_EPISODE_URL = "http://localhost:8080/episode";
+    public static final String MY_LOCATION_URL = "http://localhost:8080/location";
+    public static final String MY_CHARACTER_URL = "http://localhost:8080/character";
+
     private Long id;
 
     private String created;
@@ -45,7 +48,7 @@ public class CharacterResponse {
     }
 
     public void setEpisode(List<Episode> episodes) {
-        ArrayList<String> episodeStrings = new ArrayList<>();
+        List<String> episodeStrings = new ArrayList<>();
         episodes.forEach(singleEpisode -> {
             String episodeUrl = MY_EPISODE_URL + SLASH + singleEpisode.getId().toString();
             episodeStrings.add(episodeUrl);
@@ -140,7 +143,7 @@ public class CharacterResponse {
     }
 
     public String getUrl() {
-        return CHARACTER_URL + SLASH + id;
+        return MY_CHARACTER_URL + SLASH + id;
     }
 
     public void setUrl(String url) {

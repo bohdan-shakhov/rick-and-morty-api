@@ -23,11 +23,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.CHARACTER_URL;
-
 @Service
 @AllArgsConstructor
 public class CharacterService {
+    public static final String CHARACTER_URL = "https://rickandmortyapi.com/api/character";
+
     private final ModelMapper modelMapper = new ModelMapper();
 
     private final CharacterRepository characterRepository;

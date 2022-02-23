@@ -20,13 +20,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.ROLE_ADMIN;
-import static com.example.rickandmorty.constant.ProgrammConstant.ROLE_USER;
-
 @SpringBootApplication
 @EnableCaching
 @EnableScheduling
 public class RickAndMortyAppApplication {
+
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     public static void main(String[] args) {
         SpringApplication.run(RickAndMortyAppApplication.class, args);
     }

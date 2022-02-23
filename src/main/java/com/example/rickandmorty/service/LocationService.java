@@ -20,11 +20,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.LOCATION_URL;
-
 @Service
 @AllArgsConstructor
 public class LocationService {
+    public static final String LOCATION_URL = "https://rickandmortyapi.com/api/location";
+
     private final ModelMapper modelMapper = new ModelMapper();
     private final LocationRepository locationRepository;
     private final RestTemplate restTemplate;

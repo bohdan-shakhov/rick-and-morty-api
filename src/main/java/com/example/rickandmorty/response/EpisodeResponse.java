@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EpisodeResponse {
+    public static final String SLASH = "/";
+    public static final String MY_EPISODE_URL = "http://localhost:8080/episode";
+
     private Long id;
     private String air_date;
 
@@ -21,6 +24,7 @@ public class EpisodeResponse {
     }
 
     public void setId(Long id) {
+        this.url = MY_EPISODE_URL + SLASH + id;
         this.id = id;
     }
 
@@ -29,7 +33,7 @@ public class EpisodeResponse {
     }
 
     public void setCharacters(List<Characters> characters) {
-        ArrayList arrayList = new ArrayList();
+        List<String> arrayList = new ArrayList<>();
         characters.forEach(character -> arrayList.add(character.getName()));
         this.characters = arrayList;
     }

@@ -1,8 +1,10 @@
 package com.example.rickandmorty.response;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.*;
 
 public class LocationResponse {
+    public static final String MY_LOCATION_URL = "http://localhost:8080/location";
+    public static final String SLASH = "/";
+
     private Long id;
 
     private String created;

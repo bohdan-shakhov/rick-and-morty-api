@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.rickandmorty.constant.ProgrammConstant.EPISODE_URL;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -24,6 +23,8 @@ import static java.util.stream.Collectors.groupingBy;
 @Service
 @AllArgsConstructor
 public class EpisodeService {
+    public static final String EPISODE_URL = "https://rickandmortyapi.com/api/episode";
+
     private final ModelMapper modelMapper = new ModelMapper();
     private final EpisodeRepository episodeRepository;
     private final RestTemplate restTemplate;
