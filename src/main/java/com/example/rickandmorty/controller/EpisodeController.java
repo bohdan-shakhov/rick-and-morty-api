@@ -2,7 +2,7 @@ package com.example.rickandmorty.controller;
 
 import com.example.rickandmorty.response.EpisodeResponse;
 import com.example.rickandmorty.service.EpisodeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,13 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/episode")
+@AllArgsConstructor
 public class EpisodeController {
     private final EpisodeService episodeService;
-
-    @Autowired
-    public EpisodeController(EpisodeService episodeService) {
-        this.episodeService = episodeService;
-    }
 
     @GetMapping()
     public List<EpisodeResponse> getAllEpisodes() {
