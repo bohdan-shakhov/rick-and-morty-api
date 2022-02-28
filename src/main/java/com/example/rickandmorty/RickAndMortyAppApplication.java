@@ -1,6 +1,6 @@
 package com.example.rickandmorty;
 
-import com.example.rickandmorty.backup.BackupDatabase;
+import com.example.rickandmorty.service.BackupService;
 import com.example.rickandmorty.entity.Role;
 import com.example.rickandmorty.entity.User;
 import com.example.rickandmorty.service.CharacterService;
@@ -46,8 +46,7 @@ public class RickAndMortyAppApplication {
     CommandLineRunner runner(EpisodeService episodeService,
                              CharacterService characterService,
                              LocationService locationService,
-                             UserService userService,
-                             BackupDatabase backupDatabase) {
+                             UserService userService) {
         return args -> {
             locationService.saveToDatabase();
             episodeService.saveToDatabase();
@@ -59,8 +58,6 @@ public class RickAndMortyAppApplication {
             userService.addRoleToUser("ivan", ROLE_USER);
             userService.addRoleToUser("ivan", ROLE_ADMIN);
             userService.addRoleToUser("artem", ROLE_USER);
-//            backupDatabase.backup();
-//            backupDatabase.restore();
         };
     }
 }

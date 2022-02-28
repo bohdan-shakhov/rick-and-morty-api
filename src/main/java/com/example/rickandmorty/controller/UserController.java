@@ -3,6 +3,7 @@ package com.example.rickandmorty.controller;
 
 import com.example.rickandmorty.entity.Role;
 import com.example.rickandmorty.entity.User;
+import com.example.rickandmorty.service.BackupService;
 import com.example.rickandmorty.service.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
 import java.net.URI;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/admin")
 public class UserController {
     private final UserService userService;
+    private final BackupService backupService;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
@@ -41,6 +44,11 @@ public class UserController {
     public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
         userService.addRoleToUser(form.getUsername(), form.getRolename());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/database/restore")
+    public void restoreDatabase(@RequestBody File file) {
+        backupService.restore(file);
     }
 }
 

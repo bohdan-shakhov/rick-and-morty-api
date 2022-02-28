@@ -1,12 +1,11 @@
-package com.example.rickandmorty.backup;
+package com.example.rickandmorty.service;
 
 import com.smattme.MysqlExportService;
 import com.smattme.MysqlImportService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +16,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
 
-@Component
+@Service
 @Slf4j
-public class BackupDatabase {
+public class BackupService {
 
     @Value("${spring.datasource.username}")
     private String username;
@@ -48,16 +47,11 @@ public class BackupDatabase {
         }
     }
 
-    public void restore() {
+    public void restore(File file) {
         String sql;
-        File dir = new File("backup/sql");
-        File[] files = dir.listFiles();
-        if (files != null) {
-            Arrays.sort(files);
-        }
         try {
-            sql = new String(Files.readAllBytes(Paths.get(Objects.requireNonNull(files)[files.length - 1].toString())));
-            log.debug(files[files.length - 1].toString());
+            sql = new String(Files.readAllBytes(Paths.get(Objects.requireNonNull(file).toString())));
+            log.debug(file.toString());
 
             MysqlImportService.builder()
                     .setDatabase("test")
