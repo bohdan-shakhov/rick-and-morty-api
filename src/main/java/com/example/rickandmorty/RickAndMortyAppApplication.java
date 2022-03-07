@@ -1,6 +1,5 @@
 package com.example.rickandmorty;
 
-import com.example.rickandmorty.service.BackupService;
 import com.example.rickandmorty.entity.Role;
 import com.example.rickandmorty.entity.User;
 import com.example.rickandmorty.service.CharacterService;
