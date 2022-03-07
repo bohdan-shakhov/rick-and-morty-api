@@ -1,4 +1,4 @@
-package com.example.rickandmorty.security;
+package com.example.rickandmorty.config;
 
 import com.example.rickandmorty.filter.CustomAuthenticationFilter;
 import com.example.rickandmorty.filter.CustomAuthorizationFilter;
